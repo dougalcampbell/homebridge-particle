@@ -63,69 +63,112 @@ function ParticleAccessory(log, url, access_token, device) {
 		.setCharacteristic(Characteristic.SerialNumber, "AA098BB09");
 		
 	this.services.push(this.informationService);
+
+	switch( this.type ) {
+		case 'LIGHT': 
+			this.lightService = new Service.Lightbulb(this.name);
+			
+			this.lightService
+				.getCharacteristic(Characteristic.On)
+				.on('set', this.setState.bind(this));
+				
+			this.services.push(this.lightService);
+			break;
+		case 'SENSOR':
+			var service;
+			
+			console.log("Sensor Type: " + this.sensorType.toLowerCase());
+
+			if(this.sensorType.toLowerCase() === "temperature"){
+				console.log("Temperature Sensor");
+				
+				service = new Service.TemperatureSensor(this.name);
+				
+				service
+					.getCharacteristic(Characteristic.CurrentTemperature)
+					.on('get', this.getDefaultValue.bind(this));
+			}
+			else if(this.sensorType.toLowerCase() === "humidity"){
+				console.log("Humidity Sensor");
+				
+				service = new Service.HumiditySensor(this.name);
+				
+				service
+					.getCharacteristic(Characteristic.CurrentRelativeHumidity)
+					.on('get', this.getDefaultValue.bind(this));
+			}
+			else if(this.sensorType.toLowerCase() === "light"){
+				console.log("Light Sensor");
+				
+				service = new Service.LightSensor(this.name);
+				
+				service
+					.getCharacteristic(Characteristic.CurrentAmbientLightLevel)
+					.on('get', this.getDefaultValue.bind(this));
+			}
+				
+			if(service != undefined){
+				console.log("Initializing " + service.displayName + ", " + this.sensorType);
+				
+				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
+				var es = new eventSource(eventUrl);
+
+				console.log(eventUrl);
+
+				es.onerror = function() {
+					console.log('ERROR!');
+				};
+
+				es.addEventListener(this.eventName,
+					this.processEventData.bind(this), false);
+				
+				this.services.push(service);
+			}
+			
+			console.log("Service Count: " + this.services.length);
+			break;
+		case 'GARAGEDOOR':
+			var garageService = new Service.GarageDoorOpener(this.name);
+			
+			garageService
+				.getCharacteristic(Characteristic.CurrentDoorState)
+				.on('get', this.getDefaultValue.bind(this));
+				.on('set', this.setState.bind(this));
+				
+			garageService
+				.getCharacteristic(Characteristic.TargetDoorState)
+				.on('get', this.getDefaultValue.bind(this));
+				.on('set', this.setState.bind(this));
+				
+			garageService
+				.getCharacteristic(Characteristic.ObstructionDetected)
+				.on('get', this.getDefaultValue.bind(this));
+				.on('set', this.setState.bind(this));
+
+				console.log("Initializing " + service.displayName);
+				
+				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
+				var es = new eventSource(eventUrl);
+
+				console.log(eventUrl);
+
+				es.onerror = function() {
+					console.log('ERROR!');
+				};
+
+				es.addEventListener(this.eventName,
+					this.processEventData.bind(this), false);
+
+				
+			this.services.push(garageService);
+
+			break;
+		default:
+			console.log("Unknown service: " + this.type);
+			break;
+	}
   
-	if(this.type === "LIGHT"){
-		this.lightService = new Service.Lightbulb(this.name);
-		
-		this.lightService
-			.getCharacteristic(Characteristic.On)
-			.on('set', this.setState.bind(this));
-			
-		this.services.push(this.lightService);
-	}
-	else if(this.type === "SENSOR"){
-		var service;
-		
-		console.log("Sensor Type: " + this.sensorType.toLowerCase());
 
-		if(this.sensorType.toLowerCase() === "temperature"){
-			console.log("Temperature Sensor");
-			
-			service = new Service.TemperatureSensor(this.name);
-			
-			service
-				.getCharacteristic(Characteristic.CurrentTemperature)
-				.on('get', this.getDefaultValue.bind(this));
-		}
-		else if(this.sensorType.toLowerCase() === "humidity"){
-			console.log("Humidity Sensor");
-			
-			service = new Service.HumiditySensor(this.name);
-			
-			service
-				.getCharacteristic(Characteristic.CurrentRelativeHumidity)
-				.on('get', this.getDefaultValue.bind(this));
-		}
-		else if(this.sensorType.toLowerCase() === "light"){
-			console.log("Light Sensor");
-			
-			service = new Service.LightSensor(this.name);
-			
-			service
-				.getCharacteristic(Characteristic.CurrentAmbientLightLevel)
-				.on('get', this.getDefaultValue.bind(this));
-		}
-			
-		if(service != undefined){
-			console.log("Initializing " + service.displayName + ", " + this.sensorType);
-			
-			var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
-			var es = new eventSource(eventUrl);
-
-			console.log(eventUrl);
-
-			es.onerror = function() {
-				console.log('ERROR!');
-			};
-
-			es.addEventListener(this.eventName,
-				this.processEventData.bind(this), false);
-			
-			this.services.push(service);
-		}
-		
-		console.log("Servie Count: " + this.services.length);
-	}
 }
 
 ParticleAccessory.prototype.setState = function(state, callback) {
@@ -162,31 +205,60 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 ParticleAccessory.prototype.processEventData = function(e){
 	var data = JSON.parse(e.data);
 	var tokens = data.data.split('=');
+	var characteristic = tokens[0].toLowerCase();
 	
 	console.log(tokens[0] + " = " + tokens[1] + ", " + this.services[1].displayName + ", " + this.sensorType + ", " + this.key.toLowerCase() + ", " + tokens[0].toLowerCase());
 	console.log(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase());
 	
-	if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){	
-		if (tokens[0].toLowerCase() === "temperature") {
+	if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
+		switch( characteristic ) {
+		case: "temperature":
 			this.value = parseFloat(tokens[1]);
 
 			this.services[1]
 				.getCharacteristic(Characteristic.CurrentTemperature)
 				.setValue(parseFloat(tokens[1]));
-		}
-		else if (tokens[0].toLowerCase() === "humidity") {
+			break;
+		 case "humidity":
 			this.value = parseFloat(tokens[1]);
 
 			this.services[1]
 				.getCharacteristic(Characteristic.CurrentRelativeHumidity)
 				.setValue(parseFloat(tokens[1]));
-		}
-		else if (tokens[0].toLowerCase() === "light") {
+			break;
+		case "light":
 			this.value = parseFloat(tokens[1]);
 
 			this.services[1]
 				.getCharacteristic(Characteristic.CurrentAmbientLightLevel)
 				.setValue(parseFloat(tokens[1]));
+			break;
+		case "currentdoorstate":
+			this.value = parseInt(tokens[1], 10);
+
+			this.services[1]
+				.getCharacteristic(Characteristic.CurrentDoorState)
+				.setValue(parseInt(tokens[1], 10));
+			break;
+		case "targetdoorstate":
+			this.value = parseInt(tokens[1], 10);
+
+			this.services[1]
+				.getCharacteristic(Characteristic.TargetDoorState)
+				.setValue(parseInt(tokens[1], 10));
+			break;
+		case "obstructiondetected":
+			console.log('Characteristic ObstructionDetected: ', tokens[1]);
+			this.value = parseInt(tokens[1], 10);
+
+			this.services[1]
+				.getCharacteristic(Characteristic.CurrentDoorState)
+				.setValue(parseInt(tokens[1], 10));
+			break;
+		default:
+			console.log('Unknown Characteristic: ' + characteristic);
+			break;
+
 		}
 	}
 }
