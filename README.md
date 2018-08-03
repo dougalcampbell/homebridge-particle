@@ -1,6 +1,8 @@
 **Particle device plugin for Homebridge**
 -------------------------------------
 
+*NOTE: This is a forked, customized version, not the original*
+
 As you all know in the new version of [Homebridge](https://github.com/nfarina/homebridge), the plugin architecture is changed. In new Homebridge, plugins are published through NPM with name starts with *homebridge-*. Users can install the plugin using NPM.
 
 My previous example of Particle and Homebridge uses old plugin architecture. I have been thinking for a long time to upgrade my previous plugin to the new architecture. But because of many reasons it is delayed. Luckily last week I was able to complete and publish to NPM.
@@ -26,7 +28,7 @@ In this version, I have made some changes from the older version. Mainly the plu
                 "platform": "Particle",
                 "name": "Particle Devices",
     			"access_token": "<<access token>>",
-    			"cloudurl": "https://api.spark.io/v1/devices/",
+    			"cloudurl": "https://api.particle.io/v1/devices/",
     			"devices": [
     				{
     					"accessory": "BedroomLight",
@@ -58,7 +60,7 @@ In this version, I have made some changes from the older version. Mainly the plu
         ]
     }
 
-As you can see from the above example this `config.json` file defines 3 accessories. 2 Lights and one Temperature Sensor. The **access_token** defines the Particle Access Token and **cloudurl** defines the base Particle API url. If you are using the Particle Cloud, then the value of *cloudurl* should be https://api.spark.io/v1/devices/. If you are using local cloud, then replace with your sensor address. 
+As you can see from the above example this `config.json` file defines 3 accessories. 2 Lights and one Temperature Sensor. The **access_token** defines the Particle Access Token and **cloudurl** defines the base Particle API url. If you are using the Particle Cloud, then the value of *cloudurl* should be https://api.particle.io/v1/devices/. If you are using local cloud, then replace with your sensor address. 
 
 The `devices` array contains all the accessories. You can see the accessory object defines following string objects:
 

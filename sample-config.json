@@ -13,7 +13,7 @@
             "platform": "Particle",
             "name": "Particle Devices",
 			"access_token": "<<access token>>",
-			"cloudurl": "https://api.spark.io/v1/devices/",
+			"cloudurl": "https://api.particle.io/v1/devices/",
 			"devices": [
 				{
 					"accessory": "ParticleLight",
