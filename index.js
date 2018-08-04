@@ -64,6 +64,8 @@ function ParticleAccessory(log, url, access_token, device) {
 		
 	this.services.push(this.informationService);
 
+	var service;
+
 	switch( this.type ) {
 		case 'LIGHT': 
 			this.lightService = new Service.Lightbulb(this.name);
@@ -75,7 +77,6 @@ function ParticleAccessory(log, url, access_token, device) {
 			this.services.push(this.lightService);
 			break;
 		case 'SENSOR':
-			var service;
 			
 			console.log("Sensor Type: " + this.sensorType.toLowerCase());
 
