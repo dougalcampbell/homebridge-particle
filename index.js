@@ -192,7 +192,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 			}
 		},
 		function(error, response, body) {
-			console.log(response);
+			//console.log(response);
 
 			if (!error) {
 				callback();
@@ -223,7 +223,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 			}
 		},
 		function(error, response, body) {
-			console.log(response);
+			//console.log(response);
 
 			if (!error) {
 				console.log('setDoorState success! state = ', state);
