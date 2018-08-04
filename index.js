@@ -145,7 +145,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 
-				console.log("Initializing " + service.displayName);
+				console.log("Initializing " + service.name);
 				
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
 				var es = new eventSource(eventUrl);
