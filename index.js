@@ -132,17 +132,17 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			garageService
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.on('get', this.getDefaultValue.bind(this));
+				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
 			garageService
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.on('get', this.getDefaultValue.bind(this));
+				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
 			garageService
 				.getCharacteristic(Characteristic.ObstructionDetected)
-				.on('get', this.getDefaultValue.bind(this));
+				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 
 				console.log("Initializing " + service.displayName);
