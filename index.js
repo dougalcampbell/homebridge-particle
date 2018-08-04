@@ -51,7 +51,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.url = url;
 	this.value = 20;
 	
-	console.log(this.name + " = " + this.sensorType);
+	console.log(this.name + " = " + (this.sensorType ? this.sensorType : this.type) ;
 	
 	this.services = [];
 	
@@ -133,17 +133,17 @@ function ParticleAccessory(log, url, access_token, device) {
 			garageService
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.on('get', this.getDefaultValue.bind(this));
-				.on('set', this.setState.bind(this));
+				.on('set', this.setDoorState.bind(this));
 				
 			garageService
 				.getCharacteristic(Characteristic.TargetDoorState)
 				.on('get', this.getDefaultValue.bind(this));
-				.on('set', this.setState.bind(this));
+				.on('set', this.setDoorState.bind(this));
 				
 			garageService
 				.getCharacteristic(Characteristic.ObstructionDetected)
 				.on('get', this.getDefaultValue.bind(this));
-				.on('set', this.setState.bind(this));
+				.on('set', this.setDoorState.bind(this));
 
 				console.log("Initializing " + service.displayName);
 				
@@ -196,6 +196,41 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 			if (!error) {
 				callback();
 			} else {
+				callback(error);
+			}
+		}
+	);
+}
+
+ParticleAccessory.prototype.setDoorState = function(state, callback) {
+	this.log.info("Getting current state...");
+	
+	this.log.info("URL: " + this.url);
+	this.log.info("Device ID: " + this.deviceId);
+  
+	var onUrl = this.url + this.deviceId + "/" + this.functionName;
+	
+	this.log.info("Calling function: " + onUrl);
+	
+	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
+
+	request.post(
+		onUrl, {
+			form: {
+				access_token: this.accessToken,
+				args: argument
+			}
+		},
+		function(error, response, body) {
+			console.log(response);
+
+			if (!error) {
+				console.log('setDoorState success! state = ', state);
+				callback();
+			} else {
+				console.log('setDoorState Error!');
+				console.log('state = ', state);
+				console.log('error: ', error);
 				callback(error);
 			}
 		}
