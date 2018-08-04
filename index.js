@@ -129,19 +129,19 @@ function ParticleAccessory(log, url, access_token, device) {
 			console.log("Service Count: " + this.services.length);
 			break;
 		case 'GARAGEDOOR':
-			var garageService = new Service.GarageDoorOpener(this.name);
+			var service = new Service.GarageDoorOpener(this.name);
 			
-			garageService
+			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
-			garageService
+			service
 				.getCharacteristic(Characteristic.TargetDoorState)
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
-			garageService
+			service
 				.getCharacteristic(Characteristic.ObstructionDetected)
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
@@ -161,7 +161,7 @@ function ParticleAccessory(log, url, access_token, device) {
 					this.processEventData.bind(this), false);
 
 				
-			this.services.push(garageService);
+			this.services.push(service);
 
 			break;
 		default:
