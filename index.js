@@ -51,7 +51,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.url = url;
 	this.value = 20;
 	
-	console.log(this.name + " = " + (this.sensorType ? this.sensorType : this.type) ;
+	console.log(this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
 	this.services = [];
 	
