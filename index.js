@@ -109,7 +109,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			}
 				
 			if(service != undefined){
-				console.log("Initializing " + service.displayName + ", " + this.sensorType);
+				console.log("Initializing " + service.name + ", " + this.sensorType);
 				
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
 				var es = new eventSource(eventUrl);
@@ -243,7 +243,7 @@ ParticleAccessory.prototype.processEventData = function(e){
 	var tokens = data.data.split('=');
 	var characteristic = tokens[0].toLowerCase();
 	
-	console.log(tokens[0] + " = " + tokens[1] + ", " + this.services[1].displayName + ", " + this.sensorType + ", " + this.key.toLowerCase() + ", " + tokens[0].toLowerCase());
+	console.log(tokens[0] + " = " + tokens[1] + ", " + this.services[1].name + ", " + this.sensorType + ", " + this.key.toLowerCase() + ", " + tokens[0].toLowerCase());
 	console.log(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase());
 	
 	if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
