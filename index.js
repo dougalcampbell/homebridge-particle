@@ -247,7 +247,7 @@ ParticleAccessory.prototype.processEventData = function(e){
 	
 	if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
 		switch( characteristic ) {
-		case: "temperature":
+		case "temperature":
 			this.value = parseFloat(tokens[1]);
 
 			this.services[1]
