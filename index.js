@@ -1,3 +1,4 @@
+var ParticleAPI = require("particle-api-js");
 var request = require("request");
 var eventSource = require('eventsource');
 var Service, Characteristic;
@@ -15,6 +16,7 @@ function ParticlePlatform(log, config){
 	this.deviceId = config["deviceid"];
 	this.url = config["cloudurl"];
 	this.devices = config["devices"];
+	this.Particle = new ParticleAPI();
 }
 
 ParticlePlatform.prototype = {
@@ -148,6 +150,7 @@ function ParticleAccessory(log, url, access_token, device) {
 
 				console.log("Initializing " + service.name);
 				
+				/*
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
 				var es = new eventSource(eventUrl);
 
@@ -159,6 +162,19 @@ function ParticleAccessory(log, url, access_token, device) {
 
 				es.addEventListener(this.eventName,
 					this.processEventData.bind(this), false);
+				*/
+			
+			this.Particle.getEventStream( { 
+				'auth': this.accessToken, 
+				'device': this.deviceId,
+				'name': this.eventName
+			} )
+				.then(function( stream ) {
+					stream.on( 'event', function(data) {
+						console.log('Data:', data);
+						this.processEventData.bind(this);
+					});
+				});
 
 				
 			this.services.push(service);
@@ -184,6 +200,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	
 	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
 
+	/*
 	request.post(
 		onUrl, {
 			form: {
@@ -201,6 +218,24 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 			}
 		}
 	);
+	*/
+
+	Particle.callFunction({
+		'auth': this.accessToken,
+		'device': this.deviceId,
+		'name': this.functionName,
+		'args': argument
+	})
+		.then(
+			function(data) {
+				console.log('Called function: ' + this.functionName);
+				callback();
+			},
+			function(err) {
+				console.log('Error calling function ' + this.functionName, err);
+				callback(err);
+			}
+		);
 }
 
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
@@ -215,6 +250,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	
 	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
 
+	/*
 	request.post(
 		onUrl, {
 			form: {
@@ -236,6 +272,24 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 			}
 		}
 	);
+	*/
+
+	Particle.callFunction({
+		'auth': this.accessToken,
+		'device': this.deviceId,
+		'name': this.functionName,
+		'args': argument
+	})
+		.then(
+			function(data) {
+				console.log('Called function: ' + this.functionName);
+				callback();
+			},
+			function(err) {
+				console.log('Error calling function ' + this.functionName, err);
+				callback(err);
+			}
+		);
 }
 
 ParticleAccessory.prototype.processEventData = function(e){

@@ -15,7 +15,8 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "request": "^2.65.0",
-    "eventsource": ""
+    "eventsource": "",
+    "particle-api-js": "^7.2.3",
+    "request": "^2.65.0"
   }
 }

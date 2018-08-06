@@ -39,6 +39,15 @@
 					"sensorType": "temperature",
 					"key": "temperature",
 					"event_name": "tvalue"
+				},
+				{
+					"accessory": "GarageDoorOpener",
+					"name": "My Garage Door",
+					"deviceid": "<<device id>>",
+					"type": "GARAGEDOOR",
+					"function_name": "toggleRelay",
+					"event_name": "garageEvent",
+					"args": "1={STATE}"
 				}
 			]
         }
