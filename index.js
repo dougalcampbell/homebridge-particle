@@ -16,7 +16,6 @@ function ParticlePlatform(log, config){
 	this.deviceId = config["deviceid"];
 	this.url = config["cloudurl"];
 	this.devices = config["devices"];
-	this.Particle = new ParticleAPI();
 }
 
 ParticlePlatform.prototype = {
@@ -53,6 +52,8 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.url = url;
 	this.value = 20;
 	
+	this.Particle = new ParticleAPI();
+		
 	console.log(this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
 	this.services = [];
