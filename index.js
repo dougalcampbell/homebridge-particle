@@ -196,6 +196,7 @@ function ParticleAccessory(log, url, access_token, device) {
 							this.processEventData.bind(this);
 						});
 						*/
+						console.log( 'Event received from device: ' + this_pa.deviceId)
 						stream.on( 'event', this_pa.processEventData.bind(this_pa) );
 					},
 					function(err) {
