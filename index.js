@@ -196,13 +196,16 @@ function ParticleAccessory(log, url, access_token, device) {
 							this.processEventData.bind(this);
 						});
 						*/
-						console.log( 'Event received from device: ' + this_pa.deviceId)
-						stream.on( 'event', this_pa.processEventData.bind(this_pa) );
+						console.log('Got a stream. Adding EventListener...');
+
+						stream.addEventListener( this_pa.eventName, function(data) {
+							console.log('EventStream Data:', data);
+							this_pa.processEventData.bind(this_pa)(data);
+						});
 					},
 					function(err) {
 						console.log("Error in event stream:", err);
 					});
-
 				
 			this.services.push(service);
 
