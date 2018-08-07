@@ -196,12 +196,13 @@ function ParticleAccessory(log, url, access_token, device) {
 							this.processEventData.bind(this);
 						});
 						*/
-						console.log(stream, JSON.stringify(stream));
+						console.log('stream', stream);
 						console.log('Got a stream. Adding EventListener...');
+						console.log('listening for:' + this_pa.eventName);
 
-						stream.onmessage( this_pa.eventName, function(data) {
+						stream.on(this_pa.eventName, function(data) {
 							console.log('EventStream Data:', data);
-							this_pa.processEventData.bind(this_pa)(data);
+							(this_pa.processEventData.bind(this_pa))(data);
 						});
 					},
 					function(err) {
