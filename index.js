@@ -39,6 +39,7 @@ ParticlePlatform.prototype = {
 };
 
 function ParticleAccessory(log, url, access_token, device) {
+	var this_pa = this;
 	this.log = log;
 	this.name = device["name"],
 	this.args = device["args"];
@@ -136,7 +137,7 @@ function ParticleAccessory(log, url, access_token, device) {
 						function( stream ) {
 							stream.on( 'event', function(data) {
 								console.log('Data:', data);
-								this.processEventData.bind(this);
+								this_pa.processEventData.bind(this_pa)(data);
 							});
 						},
 						function(err) {
@@ -195,7 +196,7 @@ function ParticleAccessory(log, url, access_token, device) {
 							this.processEventData.bind(this);
 						});
 						*/
-						stream.on( 'event', this.processEventData.bind(this) );
+						stream.on( 'event', this_pa.processEventData.bind(this_pa) );
 					},
 					function(err) {
 						console.log("Error in event stream:", err);
