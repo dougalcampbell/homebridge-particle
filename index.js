@@ -112,7 +112,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			}
 				
 			if(service != undefined){
-				console.log("Initializing " + service.name + ", " + this.sensorType);
+				console.log("Initializing " + service.displayName + ", " + this.sensorType);
 				
 				/*
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
@@ -132,12 +132,16 @@ function ParticleAccessory(log, url, access_token, device) {
 					'deviceId': this.deviceId,
 					'name': this.eventName
 				} )
-					.then(function( stream ) {
-						stream.on( 'event', function(data) {
-							console.log('Data:', data);
-							this.processEventData.bind(this);
+					.then(
+						function( stream ) {
+							stream.on( 'event', function(data) {
+								console.log('Data:', data);
+								this.processEventData.bind(this);
+							});
+						},
+						function(err) {
+							console.log("Error in event stream:", err);
 						});
-					});
 
 				this.services.push(service);
 			}
@@ -162,7 +166,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 
-				console.log("Initializing " + service.name);
+			console.log("Initializing " + service.displayName);
 				
 				/*
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
@@ -183,12 +187,19 @@ function ParticleAccessory(log, url, access_token, device) {
 				'deviceId': this.deviceId,
 				'name': this.eventName
 			} )
-				.then(function( stream ) {
-					stream.on( 'event', function(data) {
-						console.log('Data:', data);
-						this.processEventData.bind(this);
+				.then(
+					function( stream ) {
+						/*
+						stream.on( 'event', function(data) {
+							console.log('EventStream Data:', data);
+							this.processEventData.bind(this);
+						});
+						*/
+						stream.on( 'event', this.processEventData.bind(this) );
+					},
+					function(err) {
+						console.log("Error in event stream:", err);
 					});
-				});
 
 				
 			this.services.push(service);
