@@ -251,7 +251,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 		'auth': this_pa.accessToken,
 		'deviceId': this_pa.deviceId,
 		'name': this_pa.functionName,
-		'args': argument
+		'argument': argument
 	})
 		.then(
 			function(data) {
@@ -310,7 +310,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 		'auth': this_pa.accessToken,
 		'deviceId': this_pa.deviceId,
 		'name': this_pa.functionName,
-		'args': argument
+		'argument': argument
 	})
 		.then(
 			function(data) {
