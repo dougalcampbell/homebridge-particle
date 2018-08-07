@@ -322,7 +322,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('Error calling function ' + this_pa.functionName, err);
+				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
 				callback(err);
 			}
 		);
