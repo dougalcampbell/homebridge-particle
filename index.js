@@ -129,7 +129,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				*/
 				this.Particle.getEventStream( { 
 					'auth': this.accessToken, 
-					'device': this.deviceId,
+					'deviceId': this.deviceId,
 					'name': this.eventName
 				} )
 					.then(function( stream ) {
@@ -180,7 +180,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			this.Particle.getEventStream( { 
 				'auth': this.accessToken, 
-				'device': this.deviceId,
+				'deviceId': this.deviceId,
 				'name': this.eventName
 			} )
 				.then(function( stream ) {
@@ -236,7 +236,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 
 	this.Particle.callFunction({
 		'auth': this.accessToken,
-		'device': this.deviceId,
+		'deviceId': this.deviceId,
 		'name': this.functionName,
 		'args': argument
 	})
@@ -246,6 +246,10 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 				callback();
 			},
 			function(err) {
+				console.log('setState Error!');
+				console.log('device = ', this.deviceId);
+				console.log('state = ', state);
+				console.log('args = ', argument);
 				console.log('Error calling function ' + this.functionName, err);
 				callback(err);
 			}
@@ -290,7 +294,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 
 	this.Particle.callFunction({
 		'auth': this.accessToken,
-		'device': this.deviceId,
+		'deviceId': this.deviceId,
 		'name': this.functionName,
 		'args': argument
 	})
@@ -300,6 +304,10 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				callback();
 			},
 			function(err) {
+				console.log('setDoorState Error!');
+				console.log('device = ', this.deviceId);
+				console.log('state = ', state);
+				console.log('args = ', argument);
 				console.log('Error calling function ' + this.functionName, err);
 				callback(err);
 			}
