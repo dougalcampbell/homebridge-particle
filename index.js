@@ -114,6 +114,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			if(service != undefined){
 				console.log("Initializing " + service.name + ", " + this.sensorType);
 				
+				/*
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
 				var es = new eventSource(eventUrl);
 
@@ -125,7 +126,19 @@ function ParticleAccessory(log, url, access_token, device) {
 
 				es.addEventListener(this.eventName,
 					this.processEventData.bind(this), false);
-				
+				*/
+				this.Particle.getEventStream( { 
+					'auth': this.accessToken, 
+					'device': this.deviceId,
+					'name': this.eventName
+				} )
+					.then(function( stream ) {
+						stream.on( 'event', function(data) {
+							console.log('Data:', data);
+							this.processEventData.bind(this);
+						});
+					});
+
 				this.services.push(service);
 			}
 			
@@ -221,7 +234,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	);
 	*/
 
-	Particle.callFunction({
+	this.Particle.callFunction({
 		'auth': this.accessToken,
 		'device': this.deviceId,
 		'name': this.functionName,
@@ -275,7 +288,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	);
 	*/
 
-	Particle.callFunction({
+	this.Particle.callFunction({
 		'auth': this.accessToken,
 		'device': this.deviceId,
 		'name': this.functionName,
