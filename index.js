@@ -203,6 +203,7 @@ function ParticleAccessory(log, url, access_token, device) {
 }
 
 ParticleAccessory.prototype.setState = function(state, callback) {
+	var this_pa = this;
 	this.log.info("Getting current state...");
 	
 	this.log.info("URL: " + this.url);
@@ -235,28 +236,29 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	*/
 
 	this.Particle.callFunction({
-		'auth': this.accessToken,
-		'deviceId': this.deviceId,
-		'name': this.functionName,
+		'auth': this_pa.accessToken,
+		'deviceId': this_pa.deviceId,
+		'name': this_pa.functionName,
 		'args': argument
 	})
 		.then(
 			function(data) {
-				console.log('Called function: ' + this.functionName);
+				console.log('Called function: ' + this_pa.functionName);
 				callback();
 			},
 			function(err) {
 				console.log('setState Error!');
-				console.log('device = ', this.deviceId);
+				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('Error calling function ' + this.functionName, err);
+				console.log('Error calling function ' + this_pa.functionName, err);
 				callback(err);
 			}
 		);
 }
 
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
+	var this_pa = this;
 	this.log.info("Getting current state...");
 	
 	this.log.info("URL: " + this.url);
@@ -293,22 +295,22 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	*/
 
 	this.Particle.callFunction({
-		'auth': this.accessToken,
-		'deviceId': this.deviceId,
-		'name': this.functionName,
+		'auth': this_pa.accessToken,
+		'deviceId': this_pa.deviceId,
+		'name': this_pa.functionName,
 		'args': argument
 	})
 		.then(
 			function(data) {
-				console.log('Called function: ' + this.functionName);
+				console.log('Called function: ' + this_pa.functionName);
 				callback();
 			},
 			function(err) {
 				console.log('setDoorState Error!');
-				console.log('device = ', this.deviceId);
+				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('Error calling function ' + this.functionName, err);
+				console.log('Error calling function ' + this_pa.functionName, err);
 				callback(err);
 			}
 		);
