@@ -135,8 +135,8 @@ function ParticleAccessory(log, url, access_token, device) {
 				} )
 					.then(
 						function( stream ) {
-							stream.on( 'event', function(data) {
-								console.log('Data:', data);
+							stream.addEventListener( this_pa.eventName, function(data) {
+								console.log('EventStream Data:', data);
 								this_pa.processEventData.bind(this_pa)(data);
 							});
 						},
