@@ -147,7 +147,6 @@ function ParticleAccessory(log, url, access_token, device) {
 				this.services.push(service);
 			}
 			
-			console.log("Service Count: " + this.services.length);
 			break;
 		case 'GARAGEDOOR':
 			var service = new Service.GarageDoorOpener(this.name);
@@ -216,7 +215,7 @@ function ParticleAccessory(log, url, access_token, device) {
 						});
 						*/
 					
-						stream.on('event', this.processEventData.bind(this));
+						stream.on('event', this_pa.processEventData.bind(this_pa));
 
 					},
 					function(err) {
@@ -231,6 +230,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			break;
 	}
   
+	console.log("Service Count: " + this.services.length);
 
 }
 
@@ -291,7 +291,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	var this_pa = this;
-	console.info("Setting current state...");
+	console.info("Setting current door state...");
 	
 	//console.info("URL: " + this.url);
 	//console.info("Device ID: " + this.deviceId);
