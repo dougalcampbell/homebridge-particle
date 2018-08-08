@@ -196,12 +196,12 @@ function ParticleAccessory(log, url, access_token, device) {
 							this.processEventData.bind(this);
 						});
 						*/
-						console.log('stream', stream);
+						//console.log('stream', stream);
 						console.log('Got a stream. Adding EventListener...');
 						console.log('listening for:' + this_pa.eventName);
 
 						stream.on('event', function(data) {
-							console.log('EventStream Data:', data);
+							console.log('EventStream Data:', data.data);
 							this_pa.processEventData(data);
 						});
 					},
@@ -336,6 +336,8 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 
 ParticleAccessory.prototype.processEventData = function(obj){
 	console.log('In processEventData()');
+	console.log('obj: ', obj);
+	console.log('this: ', this);
 	var data = obj.data;
 	var tokens = data.split('=');
 	var characteristic = tokens[0].toLowerCase();
