@@ -150,9 +150,9 @@ function ParticleAccessory(log, url, access_token, device) {
 			console.log("Service Count: " + this.services.length);
 			break;
 		case 'GARAGEDOOR':
-			this.value = 1; // Closed by default
 			var service = new Service.GarageDoorOpener(this.name);
 			
+			this.value = 1; // Closed by default
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				//.on('get', this.getDefaultValue.bind(this))
@@ -160,6 +160,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
+			this.value = 1; // Closed by default
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
 				//.on('get', this.getDefaultValue.bind(this))
@@ -167,6 +168,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
+			this.value = false; // Closed by default
 			service
 				.getCharacteristic(Characteristic.ObstructionDetected)
 				//.on('get', this.getDefaultValue.bind(this))
@@ -207,10 +209,15 @@ function ParticleAccessory(log, url, access_token, device) {
 						console.log('Got a stream. Adding EventListener...');
 						console.log('listening for:' + this_pa.eventName);
 
+						/*
 						stream.on('event', function(data) {
 							console.log('EventStream Data:', data.data);
 							this_pa.processEventData(data);
 						});
+						*/
+					
+						stream.on('event', this.processEventData.bind(this));
+
 					},
 					function(err) {
 						console.log("Error in event stream:", err);
@@ -284,10 +291,10 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	var this_pa = this;
-	console.info("Getting current state...");
+	console.info("Setting current state...");
 	
-	console.info("URL: " + this.url);
-	console.info("Device ID: " + this.deviceId);
+	//console.info("URL: " + this.url);
+	//console.info("Device ID: " + this.deviceId);
   
 	var onUrl = this.url + this.deviceId + "/" + this.functionName;
 	
@@ -328,6 +335,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 		.then(
 			function(data) {
 				console.log('Called function: ' + this_pa.functionName);
+				console.log('function returned data: ', data);
 				callback();
 			},
 			function(err) {
