@@ -150,6 +150,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			console.log("Service Count: " + this.services.length);
 			break;
 		case 'GARAGEDOOR':
+			this.value = 1; // Closed by default
 			var service = new Service.GarageDoorOpener(this.name);
 			
 			service
