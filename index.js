@@ -200,7 +200,7 @@ function ParticleAccessory(log, url, access_token, device) {
 						console.log('Got a stream. Adding EventListener...');
 						console.log('listening for:' + this_pa.eventName);
 
-						stream.on(this_pa.eventName, function(data) {
+						stream.on('event', function(data) {
 							console.log('EventStream Data:', data);
 							this_pa.processEventData(data);
 						});
@@ -334,9 +334,10 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 		);
 }
 
-ParticleAccessory.prototype.processEventData = function(e){
-	var data = JSON.parse(e.data);
-	var tokens = data.data.split('=');
+ParticleAccessory.prototype.processEventData = function(obj){
+	console.log('In processEventData()');
+	var data = obj.data;
+	var tokens = data.split('=');
 	var characteristic = tokens[0].toLowerCase();
 	
 	console.log(tokens[0] + " = " + tokens[1] + ", " + this.services[1].name + ", " + this.sensorType + ", " + this.key.toLowerCase() + ", " + tokens[0].toLowerCase());
