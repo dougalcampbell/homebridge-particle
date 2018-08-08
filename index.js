@@ -135,9 +135,9 @@ function ParticleAccessory(log, url, access_token, device) {
 				} )
 					.then(
 						function( stream ) {
-							stream.addEventListener( this_pa.eventName, function(data) {
+							stream.on(this_pa.eventName, function(data) {
 								console.log('EventStream Data:', data);
-								this_pa.processEventData.bind(this_pa)(data);
+								this_pa.processEventData(data);
 							});
 						},
 						function(err) {
@@ -202,7 +202,7 @@ function ParticleAccessory(log, url, access_token, device) {
 
 						stream.on(this_pa.eventName, function(data) {
 							console.log('EventStream Data:', data);
-							(this_pa.processEventData.bind(this_pa))(data);
+							this_pa.processEventData(data);
 						});
 					},
 					function(err) {
