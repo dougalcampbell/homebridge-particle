@@ -228,14 +228,14 @@ function ParticleAccessory(log, url, access_token, device) {
 
 ParticleAccessory.prototype.setState = function(state, callback) {
 	var this_pa = this;
-	this.log.info("Getting current state...");
+	console.log.info("Getting current state...");
 	
-	this.log.info("URL: " + this.url);
-	this.log.info("Device ID: " + this.deviceId);
+	console.log.info("URL: " + this.url);
+	console.log.info("Device ID: " + this.deviceId);
   
 	var onUrl = this.url + this.deviceId + "/" + this.functionName;
 	
-	this.log.info("Calling function: " + onUrl);
+	console.log.info("Calling function: " + onUrl);
 	
 	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
 
@@ -283,16 +283,16 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	var this_pa = this;
-	this.log.info("Getting current state...");
+	console.log.info("Getting current state...");
 	
-	this.log.info("URL: " + this.url);
-	this.log.info("Device ID: " + this.deviceId);
+	console.log.info("URL: " + this.url);
+	console.log.info("Device ID: " + this.deviceId);
   
 	var onUrl = this.url + this.deviceId + "/" + this.functionName;
 	
-	this.log.info("Calling function: " + onUrl);
+	console.log.info("Calling function: " + onUrl);
 	
-	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
+	var argument = this.args.replace("{STATE}", state);
 
 	/*
 	request.post(
