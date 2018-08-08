@@ -154,18 +154,24 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				//.on('get', this.getDefaultValue.bind(this))
+				//.on('set', this.setDoorState.bind(this));
+				.on('get', this.getDefaultValue)
+				.on('set', this.setDoorState);
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				//.on('get', this.getDefaultValue.bind(this))
+				//.on('set', this.setDoorState.bind(this));
+				.on('get', this.getDefaultValue)
+				.on('set', this.setDoorState);
 				
 			service
 				.getCharacteristic(Characteristic.ObstructionDetected)
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				//.on('get', this.getDefaultValue.bind(this))
+				//.on('set', this.setDoorState.bind(this));
+				.on('get', this.getDefaultValue)
+				.on('set', this.setDoorState);
 
 			console.log("Initializing " + service.displayName);
 				
