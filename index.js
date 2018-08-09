@@ -149,33 +149,36 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			break;
 		case 'GarageDoorOpener':
-			var service = new Service.GarageDoorOpener(this.name);
-			console.log('Characteristics:', service.characteristics);
-			
-			this.value = 1; // Closed by default
+			var service = new Service[this.type](this.name);
+			//console.log('Characteristics:', service.characteristics);
+			/*
+			service.characteristics.forEach(function(char){
+				char
+					.on('get', this.getDefaultValue.bind(this))
+					.on('set', this.setDoorState.bind(this));
+			});
+			//*/
+			//*
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				//.on('get', this.getDefaultValue.bind(this))
-				//.on('set', this.setDoorState.bind(this));
+				.setValue(1) // Default to CLOSED
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 				
 			this.value = 1; // Closed by default
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				//.on('get', this.getDefaultValue.bind(this))
-				//.on('set', this.setDoorState.bind(this));
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
-				
-			this.value = false; // Closed by default
-			service
-				.getCharacteristic(Characteristic.ObstructionDetected)
-				//.on('get', this.getDefaultValue.bind(this))
-				//.on('set', this.setDoorState.bind(this));
+				.setValue(1) // Default to CLOSED
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 
+			// Let's ignore ObstructionDetected for now...
+			/*				
+			service
+				.getCharacteristic(Characteristic.ObstructionDetected)
+				.on('get', this.getDefaultValue.bind(this))
+				.on('set', this.setDoorState.bind(this));
+			//*/
 			console.log("Initializing " + service.displayName);
 				
 				/*
@@ -237,14 +240,14 @@ function ParticleAccessory(log, url, access_token, device) {
 
 ParticleAccessory.prototype.setState = function(state, callback) {
 	var this_pa = this;
-	console.info("Getting current state...");
+	console.info("Setting current state...");
 	
 	console.info("URL: " + this.url);
 	console.info("Device ID: " + this.deviceId);
   
-	var onUrl = this.url + this.deviceId + "/" + this.functionName;
+	//var onUrl = this.url + this.deviceId + "/" + this.functionName;
 	
-	console.info("Calling function: " + onUrl);
+	//console.info("Calling function: " + onUrl);
 	
 	var argument = this.args.replace("{STATE}", (state ? "1" : "0"));
 
@@ -293,15 +296,10 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	var this_pa = this;
 	console.info("Setting current door state...");
+
+	console.info("Calling function: " + this.functionName);
 	
-	//console.info("URL: " + this.url);
-	//console.info("Device ID: " + this.deviceId);
-  
-	var onUrl = this.url + this.deviceId + "/" + this.functionName;
-	
-	console.info("Calling function: " + onUrl);
-	
-	var argument = this.args.replace("{STATE}", state);
+	var argument = state;
 
 	/*
 	request.post(
@@ -357,11 +355,14 @@ ParticleAccessory.prototype.processEventData = function(obj){
 	console.log('obj.data: ', data);
 	var tokens = data.split('=');
 	var characteristic = tokens[0].toLowerCase();
+	var value = tokens[1];
+	var service = this.services[1];
 	
-	console.log(tokens[0] + " = " + tokens[1] + ", " + this.services[1].name + ", " + this.sensorType + ", " + this.key.toLowerCase() + ", " + tokens[0].toLowerCase());
-	console.log(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase());
+	console.log(characteristic + " = " + value + ", " + service.name + ", " + ", " + characteristic);
+	console.log(service != undefined);
 	
-	if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
+	//if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
+	if(service != undefined){
 		switch( characteristic ) {
 		case "temperature":
 			this.value = parseFloat(tokens[1]);
@@ -385,26 +386,26 @@ ParticleAccessory.prototype.processEventData = function(obj){
 				.setValue(parseFloat(tokens[1]));
 			break;
 		case "currentdoorstate":
-			this.value = parseInt(tokens[1], 10);
+			this.value = parseInt(value, 10);
 
 			this.services[1]
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(parseInt(tokens[1], 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
-			this.value = parseInt(tokens[1], 10);
+			this.value = parseInt(value, 10);
 
 			this.services[1]
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.setValue(parseInt(tokens[1], 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "obstructiondetected":
 			console.log('Characteristic ObstructionDetected: ', tokens[1]);
-			this.value = parseInt(tokens[1], 10);
+			this.value = parseInt(value, 10);
 
-			this.services[1]
-				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(parseInt(tokens[1], 10));
+			service
+				.getCharacteristic(Characteristic.ObstructionDetected)
+				.setValue(parseInt(value, 10));
 			break;
 		default:
 			console.log('Unknown Characteristic: ' + characteristic);
