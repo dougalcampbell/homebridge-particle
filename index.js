@@ -163,7 +163,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.setValue(1) // Default to CLOSED
 				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				//.on('set', this.setDoorState.bind(this)); // CurrentDoorState not writable
 				
 			this.value = 1; // Closed by default
 			service
@@ -334,7 +334,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 		.then(
 			function(data) {
 				console.log('Called function: ' + this_pa.functionName);
-				console.log('function returned data: ', data);
+				//console.log('function returned data: ', data);
 				callback();
 			},
 			function(err) {
@@ -358,10 +358,8 @@ ParticleAccessory.prototype.processEventData = function(obj){
 	var value = tokens[1];
 	var service = this.services[1];
 	
-	console.log(characteristic + " = " + value + ", " + service.name + ", " + ", " + characteristic);
-	console.log(service != undefined);
+	console.log(characteristic + " = " + value + ", " + service.displayName);
 	
-	//if(this.services[1] != undefined && this.key.toLowerCase() === tokens[0].toLowerCase()){
 	if(service != undefined){
 		switch( characteristic ) {
 		case "temperature":
