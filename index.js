@@ -1,13 +1,13 @@
 var ParticleAPI = require("particle-api-js");
-var request = require("request");
-var eventSource = require('eventsource');
+//var request = require("request");
+//var eventSource = require('eventsource');
 var Service, Characteristic;
 
 module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
 	Characteristic = homebridge.hap.Characteristic;
   
-	homebridge.registerPlatform("homebridge-particle", "Particle", ParticlePlatform);
+	homebridge.registerPlatform("homebridge-particle-service", "ParticleService", ParticlePlatform);
 }
 
 function ParticlePlatform(log, config){
@@ -71,7 +71,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	var service;
 
 	switch( this.type ) {
-		case 'LIGHT': 
+		case 'Lightbulb': 
 			this.lightService = new Service.Lightbulb(this.name);
 			
 			this.lightService
@@ -148,8 +148,9 @@ function ParticleAccessory(log, url, access_token, device) {
 			}
 			
 			break;
-		case 'GARAGEDOOR':
+		case 'GarageDoorOpener':
 			var service = new Service.GarageDoorOpener(this.name);
+			console.log('Characteristics:', service.characteristics);
 			
 			this.value = 1; // Closed by default
 			service
