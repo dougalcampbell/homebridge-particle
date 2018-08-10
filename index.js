@@ -149,6 +149,7 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			break;
 		case 'GarageDoorOpener':
+			this.value = 1;
 			var service = new Service[this.type](this.name);
 			//console.log('Characteristics:', service.characteristics);
 			/*
