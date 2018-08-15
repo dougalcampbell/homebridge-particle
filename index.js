@@ -333,7 +333,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	})
 		.then(
 			function(data) {
-				console.log('Called function: ' + this_pa.functionName);
+				console.log('Called function: ' + this.functionName);
 				//console.log('function returned data: ', data);
 				callback();
 			},
