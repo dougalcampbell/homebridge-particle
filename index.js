@@ -164,7 +164,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.setValue(1) // Default to CLOSED
 				.on('get', this.getDefaultValue.bind(this))
-				//.on('set', this.setDoorState.bind(this)); // CurrentDoorState not writable
+				//.on('set', this.setDoorState.bind(this)); // CurrentDoorState not writable?
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
@@ -333,9 +333,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	})
 		.then(
 			function(data) {
-				console.log('Called function: ' + this.functionName);
-				//console.log('function returned data: ', data);
-				callback();
+				console.log('Called function: ' + this_pa.functionName);
+				console.log('function returned data: ', data);
+				callback.bind(this_pa)(null, data);
 			},
 			function(err) {
 				console.log('setDoorState Error!');
@@ -343,7 +343,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('state = ', state);
 				console.log('args = ', argument);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
-				callback(err);
+				callback.bind(this_pa)(err);
 			}
 		);
 }
