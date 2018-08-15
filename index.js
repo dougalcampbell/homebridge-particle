@@ -336,7 +336,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('Called function: ' + this_pa.functionName);
 				console.log('function returned data: ', data);
 				console.log('callback: ', callback);
-				callback.bind(this_pa)(null, data);
+				callback();
 			},
 			function(err) {
 				console.log('setDoorState Error!');
@@ -396,7 +396,7 @@ ParticleAccessory.prototype.processEventData = function(obj){
 
 			this.services[1]
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.updateValue(parseInt(value, 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "obstructiondetected":
 			console.log('Characteristic ObstructionDetected: ', value);
