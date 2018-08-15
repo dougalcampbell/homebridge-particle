@@ -40,7 +40,7 @@ ParticlePlatform.prototype = {
 
 function ParticleAccessory(log, url, access_token, device) {
 	var this_pa = this;
-	this.prototype.this_pa = this_pa;
+	this.this_pa = this_pa;
 	this.log = log;
 	this.name = device["name"],
 	this.args = device["args"];
@@ -56,7 +56,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	
 	var Particle = new ParticleAPI();
 	
-	this.prototype.Particle = Particle;
+	this.Particle = Particle;
 
 	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
