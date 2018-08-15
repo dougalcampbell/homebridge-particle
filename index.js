@@ -40,6 +40,7 @@ ParticlePlatform.prototype = {
 
 function ParticleAccessory(log, url, access_token, device) {
 	var this_pa = this;
+	this.prototype.this_pa = this_pa;
 	this.log = log;
 	this.name = device["name"],
 	this.args = device["args"];
@@ -53,9 +54,11 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.url = url;
 	this.value = 20;
 	
-	this.Particle = new ParticleAPI();
-		
-	console.log(this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
+	var Particle = new ParticleAPI();
+	
+	this.prototype.Particle = Particle;
+
+	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
 	this.services = [];
 	
@@ -128,7 +131,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				es.addEventListener(this.eventName,
 					this.processEventData.bind(this), false);
 				*/
-				this.Particle.getEventStream( { 
+				Particle.getEventStream( { 
 					'auth': this.accessToken, 
 					'deviceId': this.deviceId,
 					'name': this.eventName
@@ -179,7 +182,8 @@ function ParticleAccessory(log, url, access_token, device) {
 				.on('get', this.getDefaultValue.bind(this))
 				.on('set', this.setDoorState.bind(this));
 			//*/
-			console.log("Initializing " + service.displayName);
+			console.log("Initialized " + service.displayName);
+
 				
 				/*
 				var eventUrl = this.url + this.deviceId + "/events/" + this.eventName + "?access_token=" + this.accessToken;
@@ -224,7 +228,10 @@ function ParticleAccessory(log, url, access_token, device) {
 					},
 					function(err) {
 						console.log("Error in event stream:", err);
-					});
+					})
+				.catch( err => {
+					console.log('getEventStream error caught: ', err);
+				});
 				
 			this.services.push(service);
 
@@ -344,9 +351,12 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('state = ', state);
 				console.log('args = ', argument);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
-				callback.bind(this_pa)(err);
+				callback(err);
 			}
-		);
+		)
+		.catch( err => {
+			console.log('Particle.callFunction error caught:', err);
+		});
 }
 
 ParticleAccessory.prototype.processEventData = function(obj){
@@ -364,39 +374,39 @@ ParticleAccessory.prototype.processEventData = function(obj){
 	if(service != undefined){
 		switch( characteristic ) {
 		case "temperature":
-			this.value = parseFloat(tokens[1]);
+			this.value = parseFloat(value);
 
-			this.services[1]
+			service
 				.getCharacteristic(Characteristic.CurrentTemperature)
-				.setValue(parseFloat(tokens[1]));
+				.setValue(parseFloat(value));
 			break;
 		 case "humidity":
-			this.value = parseFloat(tokens[1]);
+			this.value = parseFloat(value);
 
-			this.services[1]
+			service
 				.getCharacteristic(Characteristic.CurrentRelativeHumidity)
-				.setValue(parseFloat(tokens[1]));
+				.setValue(parseFloat(value));
 			break;
 		case "light":
-			this.value = parseFloat(tokens[1]);
+			this.value = parseFloat(value);
 
-			this.services[1]
+			service
 				.getCharacteristic(Characteristic.CurrentAmbientLightLevel)
-				.setValue(parseFloat(tokens[1]));
+				.setValue(parseFloat(value));
 			break;
 		case "currentdoorstate":
 			this.value = parseInt(value, 10);
 
-			this.services[1]
+			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.setValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
 			//this.value = parseInt(value, 10);
 
-			this.services[1]
+			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.setValue(parseInt(value, 10));
+				.updateValue(parseInt(value, 10));
 			break;
 		case "obstructiondetected":
 			console.log('Characteristic ObstructionDetected: ', value);
@@ -411,6 +421,9 @@ ParticleAccessory.prototype.processEventData = function(obj){
 			break;
 
 		}
+
+		// Just an experiment...
+		console.log('Current Door State characteristic fetch by string:', service.getCharacteristic('Current Door State'));
 	}
 }
 
