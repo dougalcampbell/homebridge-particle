@@ -54,9 +54,9 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.url = url;
 	this.value = 20;
 	
-	var Particle = new ParticleAPI();
+	//var Particle = new ParticleAPI();
 	
-	this.Particle = Particle;
+	var Particle = new ParticleAPI();
 
 	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
@@ -199,7 +199,7 @@ function ParticleAccessory(log, url, access_token, device) {
 					this.processEventData.bind(this), false);
 				*/
 			
-			this.Particle.getEventStream( { 
+			Particle.getEventStream( { 
 				'auth': this.accessToken, 
 				'deviceId': this.deviceId,
 				'name': this.eventName
@@ -278,7 +278,9 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	);
 	*/
 
-	this.Particle.callFunction({
+	var Particle = new ParticleAPI();
+
+	Particle.callFunction({
 		'auth': this_pa.accessToken,
 		'deviceId': this_pa.deviceId,
 		'name': this_pa.functionName,
@@ -332,7 +334,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	);
 	*/
 
-	this.Particle.callFunction({
+	var Particle = new ParticleAPI();
+	
+	Particle.callFunction({
 		'auth': this_pa.accessToken,
 		'deviceId': this_pa.deviceId,
 		'name': this_pa.functionName,
