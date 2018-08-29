@@ -297,6 +297,9 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 		.then(
 			function(data) {
 				console.log('Called function: ' + this_pa.functionName);
+				console.log('device = ', this_pa.deviceId);
+				console.log('state = ', state);
+				console.log('args = ', argument);
 				callback();
 			},
 			function(err) {
@@ -318,6 +321,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	
 	var argument = state;
 
+	console.log('device = ', this.deviceId);
+	console.log('state = ', state);
+	console.log('args = ', argument);
 	/*
 	request.post(
 		onUrl, {
@@ -360,10 +366,10 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 			},
 			function(err) {
 				console.log('setDoorState Error!');
-				console.log('device = ', this.deviceId);
-				console.log('state = ', this.state);
+				console.log('device = ', this_pa.deviceId);
+				console.log('state = ', this_pa.state);
 				console.log('args = ', argument);
-				console.log('Error calling function ' + this.functionName, JSON.stringify(err));
+				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
 				callback(err);
 			}
 		)
