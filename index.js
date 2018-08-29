@@ -1,3 +1,7 @@
+/**
+ * homebridge-particle-service -- Particle Service plugin for homebridge
+ */
+
 var ParticleAPI = require("particle-api-js");
 //var request = require("request");
 //var eventSource = require('eventsource');
@@ -52,11 +56,14 @@ function ParticleAccessory(log, url, access_token, device) {
 	this.key = device["key"];
 	this.accessToken = access_token;
 	this.url = url;
-	this.value = 20;
+	this.value;
+
+	var processEventData = this.processEventData.bind(this);
 	
 	//var Particle = new ParticleAPI();
 	
 	var Particle = new ParticleAPI();
+	this.Particle = Particle;
 
 	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
 	
@@ -138,9 +145,9 @@ function ParticleAccessory(log, url, access_token, device) {
 				} )
 					.then(
 						function( stream ) {
-							stream.on(this_pa.eventName, function(data) {
+							stream.on(device['event_name'], function(data) {
 								console.log('EventStream Data:', data.data);
-								this_pa.processEventData(data);
+								processEventData(data);
 							});
 						},
 						function(err) {
@@ -223,7 +230,7 @@ function ParticleAccessory(log, url, access_token, device) {
 						});
 						*/
 					
-						stream.on('event', this_pa.processEventData.bind(this_pa));
+						stream.on('event', processEventData);
 
 					},
 					function(err) {
@@ -279,6 +286,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	*/
 
 	var Particle = new ParticleAPI();
+	this.Particle = Particle; // save a reference
 
 	Particle.callFunction({
 		'auth': this_pa.accessToken,
@@ -335,26 +343,27 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	*/
 
 	var Particle = new ParticleAPI();
-	
+	this.Particle = Particle;
+
 	Particle.callFunction({
-		'auth': this_pa.accessToken,
-		'deviceId': this_pa.deviceId,
-		'name': this_pa.functionName,
+		'auth': this.accessToken,
+		'deviceId': this.deviceId,
+		'name': this.functionName,
 		'argument': argument
 	})
 		.then(
 			function(data) {
-				console.log('Called function: ' + this_pa.functionName);
+				console.log('Called function: ' + name);
 				console.log('function returned data: ', data);
 				console.log('callback: ', callback);
 				callback();
 			},
 			function(err) {
 				console.log('setDoorState Error!');
-				console.log('device = ', this_pa.deviceId);
+				console.log('device = ', deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
+				console.log('Error calling function ' + name, JSON.stringify(err));
 				callback(err);
 			}
 		)
@@ -438,6 +447,7 @@ ParticleAccessory.prototype.getDefaultValue = function(callback) {
 
 ParticleAccessory.prototype.setCurrentValue = function(value, callback) {
 	console.log("setCurrentValue, Value: " + value);
+	this.value = value;
 
 	callback(null, value);
 }
