@@ -62,7 +62,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	
 	//var Particle = new ParticleAPI();
 	
-	var Particle = new ParticleAPI();
+	var Particle = this.Particle || new ParticleAPI();
 	this.Particle = Particle;
 
 	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
@@ -285,7 +285,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	);
 	*/
 
-	var Particle = new ParticleAPI();
+	var Particle = this.Particle || new ParticleAPI();
 	this.Particle = Particle; // save a reference
 
 	Particle.callFunction({
@@ -342,7 +342,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	);
 	*/
 
-	var Particle = new ParticleAPI();
+	var Particle = this.Particle || new ParticleAPI();
 	this.Particle = Particle;
 
 	Particle.callFunction({
@@ -355,7 +355,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 			function(data) {
 				console.log('Called function: ' + this_pa.functionName);
 				console.log('function returned data: ', data);
-				console.log('callback: ', callback);
+				//console.log('callback: ', callback);
 				callback();
 			},
 			function(err) {
@@ -436,7 +436,7 @@ ParticleAccessory.prototype.processEventData = function(obj){
 		}
 
 		// Just an experiment...
-		console.log('Current Door State characteristic fetch by string:', service.getCharacteristic('Current Door State'));
+		//console.log('Current Door State characteristic fetch by string:', service.getCharacteristic('Current Door State'));
 	}
 }
 
