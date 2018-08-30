@@ -301,7 +301,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				callback();
+				callback(null, data.return_value);
 			},
 			function(err) {
 				console.log('setState Error!');
@@ -363,7 +363,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('Called function: ' + this_pa.functionName);
 				console.log('function returned data: ', data);
 				//console.log('callback: ', callback);
-				callback();
+				callback(null, data.return_value);
 			},
 			function(err) {
 				console.log('setDoorState Error!');
@@ -419,10 +419,10 @@ ParticleAccessory.prototype.processEventData = function(obj){
 
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				//.setValue(parseInt(value, 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
-			//this.value = parseInt(value, 10);
+			this.value = parseInt(value, 10);
 
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
