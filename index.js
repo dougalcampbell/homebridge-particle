@@ -419,11 +419,9 @@ ParticleAccessory.prototype.processEventData = function(obj){
 
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(parseInt(value, 10));
+				.updateValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
-			this.value = parseInt(value, 10);
-
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
 				.updateValue(parseInt(value, 10));
