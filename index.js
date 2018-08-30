@@ -5,7 +5,7 @@
 const ParticleAPI = require("particle-api-js");
 //var request = require("request");
 //var eventSource = require('eventsource');
-const Service, Characteristic;
+var Service, Characteristic;
 
 module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
