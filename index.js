@@ -2,10 +2,10 @@
  * homebridge-particle-service -- Particle Service plugin for homebridge
  */
 
-var ParticleAPI = require("particle-api-js");
+const ParticleAPI = require("particle-api-js");
 //var request = require("request");
 //var eventSource = require('eventsource');
-var Service, Characteristic;
+const Service, Characteristic;
 
 module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
@@ -159,7 +159,8 @@ function ParticleAccessory(log, url, access_token, device) {
 			
 			break;
 		case 'GarageDoorOpener':
-			this.value = 1;
+			// At startup, assume the door is closed:
+			this.value = Characteristic.CurrentDoorState.CLOSED;
 			var service = new Service[this.type](this.name);
 			//console.log('Characteristics:', service.characteristics);
 			/*
@@ -172,15 +173,15 @@ function ParticleAccessory(log, url, access_token, device) {
 			//*
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(1) // Default to CLOSED
-				.on('get', this.getDefaultValue.bind(this))
-				//.on('set', this.setDoorState.bind(this)); // CurrentDoorState not writable?
+				.setValue(Characteristic.CurrentDoorState.CLOSED) // Default to CLOSED
+				.on('get', this_pa.getDefaultValue.bind(this_pa)
+				.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.setValue(1) // Default to CLOSED
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				.setValue(Characteristic.TargetDoorState.CLOSED) // Default to CLOSED
+				.on('get', this_pa.getDefaultValue.bind(this_pa))
+				.on('set', this_pa.setDoorState.bind(this_pa));
 
 			// Let's ignore ObstructionDetected for now...
 			/*				
@@ -367,7 +368,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 			function(err) {
 				console.log('setDoorState Error!');
 				console.log('device = ', this_pa.deviceId);
-				console.log('state = ', this_pa.state);
+				console.log('state = ', state);
 				console.log('args = ', argument);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
 				callback(err);
@@ -418,7 +419,7 @@ ParticleAccessory.prototype.processEventData = function(obj){
 
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(parseInt(value, 10));
+				//.setValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
 			//this.value = parseInt(value, 10);
