@@ -175,7 +175,7 @@ function ParticleAccessory(log, url, access_token, device) {
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.setValue(Characteristic.CurrentDoorState.CLOSED) // Default to CLOSED
 				.on('get', this_pa.getDefaultValue.bind(this_pa))
-				.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
+				//.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
