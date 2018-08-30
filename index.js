@@ -173,13 +173,13 @@ function ParticleAccessory(log, url, access_token, device) {
 			//*
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.setValue(Characteristic.CurrentDoorState.CLOSED) // Default to CLOSED
+				.updateValue(Characteristic.CurrentDoorState.CLOSED) // Default to CLOSED
 				.on('get', this_pa.getDefaultValue.bind(this_pa))
 				//.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.setValue(Characteristic.TargetDoorState.CLOSED) // Default to CLOSED
+				.updateValue(Characteristic.TargetDoorState.CLOSED) // Default to CLOSED
 				.on('get', this_pa.getDefaultValue.bind(this_pa))
 				.on('set', this_pa.setDoorState.bind(this_pa));
 
@@ -424,7 +424,7 @@ ParticleAccessory.prototype.processEventData = function(obj){
 		case "targetdoorstate":
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.setValue(parseInt(value, 10));
+				.updateValue(parseInt(value, 10));
 			break;
 		case "obstructiondetected":
 			console.log('Characteristic ObstructionDetected: ', value);
