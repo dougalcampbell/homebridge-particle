@@ -419,12 +419,12 @@ ParticleAccessory.prototype.processEventData = function(obj){
 
 			service
 				.getCharacteristic(Characteristic.CurrentDoorState)
-				.updateValue(parseInt(value, 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "targetdoorstate":
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.updateValue(parseInt(value, 10));
+				.setValue(parseInt(value, 10));
 			break;
 		case "obstructiondetected":
 			console.log('Characteristic ObstructionDetected: ', value);
