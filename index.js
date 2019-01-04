@@ -180,11 +180,11 @@ function ParticleAccessory(log, url, access_token, device) {
 				.getCharacteristic(Characteristic.CurrentDoorState)
 				.updateValue(Characteristic.CurrentDoorState.CLOSED) // Default to CLOSED
 				.on('get', this_pa.getDefaultValue.bind(this_pa))
-				//.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
+				.on('set', this_pa.setDoorState.bind(this_pa)); // CurrentDoorState not writable?
 				
 			service
 				.getCharacteristic(Characteristic.TargetDoorState)
-				.updateValue(Characteristic.TargetDoorState.CLOSED) // Default to CLOSED
+				.updateValue(Characteristic.TargetDoorState.OPEN) // Default to OPEN
 				.on('get', this_pa.getDefaultValue.bind(this_pa))
 				.on('set', this_pa.setDoorState.bind(this_pa));
 
@@ -192,8 +192,8 @@ function ParticleAccessory(log, url, access_token, device) {
 			/*				
 			service
 				.getCharacteristic(Characteristic.ObstructionDetected)
-				.on('get', this.getDefaultValue.bind(this))
-				.on('set', this.setDoorState.bind(this));
+				.on('get', this_pa.getDefaultValue.bind(this_pa))
+				.on('set', this_pa.setDoorState.bind(this_pa));
 			//*/
 			console.log("Initialized " + service.displayName);
 
@@ -213,9 +213,9 @@ function ParticleAccessory(log, url, access_token, device) {
 				*/
 			
 			Particle.getEventStream( { 
-				'auth': this.accessToken, 
-				'deviceId': this.deviceId,
-				'name': this.eventName
+				'auth': this_pa.accessToken, 
+				'deviceId': this_pa.deviceId,
+				'name': this_pa.eventName
 			} )
 				.then(
 					function( stream ) {
@@ -366,6 +366,10 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 		.then(
 			function(data) {
 				console.log('Called function: ' + this_pa.functionName);
+				console.log('auth: ', this_pa.accessToken);
+				console.log('deviceId: ', this_pa.deviceId);
+				console.log('name: ', this_pa.functionName);
+				console.log('args: ', argument);
 				console.log('function returned data: ', data);
 				//console.log('callback: ', callback);
 				callback(null, data.return_value);
