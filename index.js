@@ -42,6 +42,11 @@ ParticlePlatform.prototype = {
 	}
 };
 
+
+/**
+ * NOTE: Try making this a method of ParticlePlatform.prototype?
+ * @see  https://github.com/nfarina/homebridge/blob/master/example-plugins/homebridge-samplePlatform/index.js
+ */
 function ParticleAccessory(log, url, access_token, device) {
 	var this_pa = this;
 	this.this_pa = this_pa;
@@ -62,7 +67,7 @@ function ParticleAccessory(log, url, access_token, device) {
 	
 	//var Particle = new ParticleAPI();
 	
-	var Particle = this.Particle || new ParticleAPI();
+	var Particle = /* this.Particle || */ new ParticleAPI();
 	this.Particle = Particle;
 
 	console.log('Initializing: ' + this.name + " = " + (this.sensorType ? this.sensorType : this.type) );
@@ -286,7 +291,7 @@ ParticleAccessory.prototype.setState = function(state, callback) {
 	);
 	*/
 
-	var Particle = this.Particle || new ParticleAPI();
+	var Particle = /* this.Particle || */ new ParticleAPI();
 	this.Particle = Particle; // save a reference
 
 	Particle.callFunction({
@@ -349,7 +354,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	);
 	*/
 
-	var Particle = this.Particle || new ParticleAPI();
+	var Particle = /* this.Particle || */ new ParticleAPI();
 	this.Particle = Particle;
 
 	Particle.callFunction({
@@ -370,6 +375,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
+				console.log('auth: ', this.auth);
+				console.log('deviceId: ', this.deviceId);
+				console.log('name: ', this.functionName);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
 				callback(err);
 			}
