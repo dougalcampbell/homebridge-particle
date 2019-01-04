@@ -78,8 +78,8 @@ function ParticleAccessory(log, url, access_token, device) {
 
 	this.informationService
 		.setCharacteristic(Characteristic.Manufacturer, "Particle")
-		.setCharacteristic(Characteristic.Model, "Photon")
-		.setCharacteristic(Characteristic.SerialNumber, "AA098BB09");
+		.setCharacteristic(Characteristic.Model, "ParticleCloud")
+		.setCharacteristic(Characteristic.SerialNumber, "20190103");
 		
 	this.services.push(this.informationService);
 
@@ -358,9 +358,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 	this.Particle = Particle;
 
 	Particle.callFunction({
-		'auth': this.accessToken,
-		'deviceId': this.deviceId,
-		'name': this.functionName,
+		'auth': this_pa.accessToken,
+		'deviceId': this_pa.deviceId,
+		'name': this_pa.functionName,
 		'argument': argument
 	})
 		.then(
@@ -375,9 +375,9 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('auth: ', this.auth);
-				console.log('deviceId: ', this.deviceId);
-				console.log('name: ', this.functionName);
+				console.log('auth: ', this_pa.auth);
+				console.log('deviceId: ', this_pa.deviceId);
+				console.log('name: ', this_pa.functionName);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
 				callback(err);
 			}
