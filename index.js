@@ -144,9 +144,9 @@ function ParticleAccessory(log, url, access_token, device) {
 					this.processEventData.bind(this), false);
 				*/
 				Particle.getEventStream( { 
-					'auth': this.accessToken, 
-					'deviceId': this.deviceId,
-					'name': this.eventName
+					'auth': this_pa.accessToken, 
+					'deviceId': this_pa.deviceId,
+					'name': this_pa.eventName
 				} )
 					.then(
 						function( stream ) {
@@ -375,7 +375,7 @@ ParticleAccessory.prototype.setDoorState = function(state, callback) {
 				console.log('device = ', this_pa.deviceId);
 				console.log('state = ', state);
 				console.log('args = ', argument);
-				console.log('auth: ', this_pa.auth);
+				console.log('auth: ', this_pa.accessToken);
 				console.log('deviceId: ', this_pa.deviceId);
 				console.log('name: ', this_pa.functionName);
 				console.log('Error calling function ' + this_pa.functionName, JSON.stringify(err));
